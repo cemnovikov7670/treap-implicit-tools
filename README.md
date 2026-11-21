@@ -42,3 +42,10 @@ Out-of-range indices and malformed ranges throw `RangeError`.
 ## The awkward edge
 
 `swapRanges` requires the two ranges to be disjoint and given in order: `aEnd <= bStart`. Overlapping ranges have no single obvious meaning (do you swap the overlap with itself?), and swapping ranges given in the wrong order would silently produce a different result than the same call with the arguments sorted. Rather than guess, the library throws. If you have two ranges that might arrive in either order, sort them by start before calling.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
